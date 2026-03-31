@@ -22,7 +22,7 @@ entries:
         url: https://helm.penpot.app/pubkey.asc
     apiVersion: v2
     appVersion: 2.14.1
-    created: "2026-03-31T12:02:51.164688-03:00"
+    created: "2026-03-31T16:44:38.26741-03:00"
     dependencies:
     - condition: global.postgresqlEnabled
       name: postgresql
@@ -37,7 +37,7 @@ entries:
       repository: oci://registry-1.docker.io/bitnamicharts
       version: 19.6.4
     description: Helm chart for Penpot, the Open Source design and prototyping platform.
-    digest: e8b9513f0da6cc26488e29dca5ef03bf23cf5f2d6d6224b5efb277fd20366d2e
+    digest: e64a9a0350e9f2547e56d69156bdbc1e5c72f41c4fe57cdbdd9c3385dedf91f2
     home: https://penpot.app
     icon: https://avatars.githubusercontent.com/u/30179644?s=200&v=4
     keywords:
@@ -59,17 +59,17 @@ entries:
     - https://github.com/Kubedoll-Heavy-Industries/charts
     type: application
     urls:
-    - https://kubedoll-heavy-industries.github.io/charts/penpot-0.38.0-khi.1.tgz
-    version: 0.38.0-khi.1
+    - https://kubedoll-heavy-industries.github.io/charts/penpot-0.38.1.tgz
+    version: 0.38.1
   plane-ce:
   - annotations:
       artifacthub.io/license: AGPL-3.0
     apiVersion: v2
     appVersion: 1.2.0
-    created: "2026-03-31T12:02:51.165838-03:00"
+    created: "2026-03-31T16:44:38.268521-03:00"
     description: Meet Plane. An open-source software development tool to manage issues,
       sprints, and product roadmaps with peace of mind.
-    digest: 799c2eeaced79b0ff0518681f645d2be20dc1172586b967eef2412f6ded217d5
+    digest: 3bfe3c9e5543bea35c85d27684ca7c5b60928afebc74ef21bea1c2c546b4e10c
     home: https://plane.so
     icon: https://plane.so/favicon/favicon-32x32.png
     name: plane-ce
@@ -78,6 +78,6 @@ entries:
     - https://github.com/Kubedoll-Heavy-Industries/charts
     type: application
     urls:
-    - https://kubedoll-heavy-industries.github.io/charts/plane-ce-1.4.1-khi.1.tgz
-    version: 1.4.1-khi.1
-generated: "2026-03-31T12:02:51.142566-03:00"
+    - https://kubedoll-heavy-industries.github.io/charts/plane-ce-1.4.2.tgz
+    version: 1.4.2
+generated: "2026-03-31T16:44:38.245878-03:00"
