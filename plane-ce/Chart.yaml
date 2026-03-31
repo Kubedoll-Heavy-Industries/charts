@@ -1,0 +1,14 @@
+annotations:
+  artifacthub.io/license: AGPL-3.0
+apiVersion: v2
+appVersion: 1.2.0
+description: Meet Plane. An open-source software development tool to manage issues,
+  sprints, and product roadmaps with peace of mind.
+home: https://plane.so
+icon: https://plane.so/favicon/favicon-32x32.png
+name: plane-ce
+sources:
+- https://github.com/makeplane/plane
+- https://github.com/Kubedoll-Heavy-Industries/charts
+type: application
+version: 1.4.1-khi.1

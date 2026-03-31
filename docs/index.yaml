@@ -1,0 +1,83 @@
+apiVersion: v1
+entries:
+  penpot:
+  - annotations:
+      artifacthub.io/changes: |
+        - kind: changed
+          description: bump Penpot to 2.14.1
+      artifacthub.io/containsSecurityUpdates: "false"
+      artifacthub.io/links: |
+        - name: support
+          url: https://github.com/penpot/penpot-helm/issues
+        - name: community
+          url: https://community.penpot.app
+        - name: documentation
+          url: https://help.penpot.app
+        - name: tutorials
+          url: https://www.youtube.com/playlist?list=PLgcCPfOv5v54WpXhHmNO7T-YC7AE-SRsr
+        - name: dev-diaries
+          url: https://penpot.app/dev-diaries.html
+      artifacthub.io/signKey: |
+        fingerprint: F0B526DC641A6DCBD94A2B2BA11A82757E9E6942
+        url: https://helm.penpot.app/pubkey.asc
+    apiVersion: v2
+    appVersion: 2.14.1
+    created: "2026-03-31T12:02:51.164688-03:00"
+    dependencies:
+    - condition: global.postgresqlEnabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 15.5.38
+    - condition: global.valkeyEnabled
+      name: valkey
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 3.0.31
+    - condition: global.redisEnabled
+      name: redis
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 19.6.4
+    description: Helm chart for Penpot, the Open Source design and prototyping platform.
+    digest: e8b9513f0da6cc26488e29dca5ef03bf23cf5f2d6d6224b5efb277fd20366d2e
+    home: https://penpot.app
+    icon: https://avatars.githubusercontent.com/u/30179644?s=200&v=4
+    keywords:
+    - kubernetes
+    - penpot
+    - penpotapp
+    - design
+    - designsystem
+    - opensource
+    - ux
+    - ui
+    maintainers:
+    - name: Kaleidos INC
+      url: https://kaleidos.net
+    name: penpot
+    sources:
+    - https://github.com/penpot/penpot/tree/main
+    - https://github.com/penpot/penpot-helm/tree/main
+    - https://github.com/Kubedoll-Heavy-Industries/charts
+    type: application
+    urls:
+    - https://kubedoll-heavy-industries.github.io/charts/penpot-0.38.0-khi.1.tgz
+    version: 0.38.0-khi.1
+  plane-ce:
+  - annotations:
+      artifacthub.io/license: AGPL-3.0
+    apiVersion: v2
+    appVersion: 1.2.0
+    created: "2026-03-31T12:02:51.165838-03:00"
+    description: Meet Plane. An open-source software development tool to manage issues,
+      sprints, and product roadmaps with peace of mind.
+    digest: 799c2eeaced79b0ff0518681f645d2be20dc1172586b967eef2412f6ded217d5
+    home: https://plane.so
+    icon: https://plane.so/favicon/favicon-32x32.png
+    name: plane-ce
+    sources:
+    - https://github.com/makeplane/plane
+    - https://github.com/Kubedoll-Heavy-Industries/charts
+    type: application
+    urls:
+    - https://kubedoll-heavy-industries.github.io/charts/plane-ce-1.4.1-khi.1.tgz
+    version: 1.4.1-khi.1
+generated: "2026-03-31T12:02:51.142566-03:00"

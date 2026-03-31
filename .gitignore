@@ -1,0 +1,4 @@
+# Unpacked dependency charts (the .tgz archives are sufficient)
+penpot/charts/postgresql/
+penpot/charts/redis/
+penpot/charts/valkey/
