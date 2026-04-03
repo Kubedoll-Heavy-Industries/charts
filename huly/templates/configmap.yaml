@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "huly.configMapName" . }}
+  labels:
+    {{- include "huly.labels" . | nindent 4 }}
+data:
+  DB_URL: {{ include "huly.dbUrl" . | quote }}
+  MONGO_URL: {{ include "huly.dbUrl" . | quote }}
+  ELASTIC_URL: {{ include "huly.elasticUrl" . | quote }}
+  ELASTIC_INDEX_NAME: {{ .Values.externalElasticsearch.indexName | quote }}
+  MINIO_ENDPOINT: {{ .Values.externalS3.endpoint | quote }}
+  MINIO_ACCESS_KEY: {{ .Values.externalS3.accessKey | quote }}
+  MINIO_SECRET_KEY: {{ .Values.externalS3.secretKey | quote }}
+  S3_BUCKET: {{ .Values.externalS3.bucket | quote }}
+  {{- if .Values.ingress.enabled }}
+  ACCOUNTS_URL: {{ printf "https://%s" .Values.ingress.accountDomain | quote }}
+  COLLABORATOR_URL: {{ printf "wss://%s" .Values.ingress.collaboratorDomain | quote }}
+  UPLOAD_URL: {{ printf "https://%s/files" .Values.ingress.domain | quote }}
+  FRONT_URL: {{ printf "https://%s" .Values.ingress.domain | quote }}
+  {{- else }}
+  ACCOUNTS_URL: {{ printf "http://%s-account:%v" (include "huly.fullname" .) (.Values.account.service.port | int) | quote }}
+  COLLABORATOR_URL: {{ printf "ws://%s-collaborator:%v" (include "huly.fullname" .) (.Values.collaborator.service.port | int) | quote }}
+  UPLOAD_URL: {{ printf "http://%s-front:%v/files" (include "huly.fullname" .) (.Values.front.service.port | int) | quote }}
+  FRONT_URL: {{ printf "http://%s-front:%v" (include "huly.fullname" .) (.Values.front.service.port | int) | quote }}
+  {{- end }}
+  REKONI_URL: ""
+  FULLTEXT_URL: {{ printf "http://%s-fulltext:%v" (include "huly.fullname" .) (.Values.fulltext.service.port | int) | quote }}
+  STATS_URL: {{ printf "http://%s-stats:%v" (include "huly.fullname" .) (.Values.stats.service.port | int) | quote }}
+  {{- if .Values.redpanda.enabled }}
+  KAFKA_URL: {{ printf "%s-redpanda:9092" (include "huly.fullname" .) | quote }}
+  {{- end }}

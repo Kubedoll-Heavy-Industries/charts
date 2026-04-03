@@ -1,5 +1,26 @@
 apiVersion: v1
 entries:
+  huly:
+  - apiVersion: v2
+    appVersion: v0.7.406
+    created: "2026-04-03T18:05:16.555434-03:00"
+    description: Helm chart for Huly, an open-source project management platform
+    digest: 55176c7228f8d121becace89cf772742972aa826f452b92932a0da86c5efc08a
+    home: https://huly.io
+    keywords:
+    - huly
+    - project-management
+    - collaboration
+    maintainers:
+    - name: Kubedoll Heavy Industries
+    name: huly
+    sources:
+    - https://github.com/hcengineering/huly-platform
+    - https://github.com/Kubedoll-Heavy-Industries/charts
+    type: application
+    urls:
+    - https://kubedoll-heavy-industries.github.io/charts/huly-0.1.0.tgz
+    version: 0.1.0
   penpot:
   - annotations:
       artifacthub.io/changes: |
@@ -22,7 +43,7 @@ entries:
         url: https://helm.penpot.app/pubkey.asc
     apiVersion: v2
     appVersion: 2.14.1
-    created: "2026-03-31T16:44:38.26741-03:00"
+    created: "2026-04-03T18:05:16.578964-03:00"
     dependencies:
     - condition: global.postgresqlEnabled
       name: postgresql
@@ -66,7 +87,7 @@ entries:
       artifacthub.io/license: AGPL-3.0
     apiVersion: v2
     appVersion: 1.2.0
-    created: "2026-03-31T16:44:38.268521-03:00"
+    created: "2026-04-03T18:05:16.579994-03:00"
     description: Meet Plane. An open-source software development tool to manage issues,
       sprints, and product roadmaps with peace of mind.
     digest: 3bfe3c9e5543bea35c85d27684ca7c5b60928afebc74ef21bea1c2c546b4e10c
@@ -80,4 +101,4 @@ entries:
     urls:
     - https://kubedoll-heavy-industries.github.io/charts/plane-ce-1.4.2.tgz
     version: 1.4.2
-generated: "2026-03-31T16:44:38.245878-03:00"
+generated: "2026-04-03T18:05:16.554553-03:00"

@@ -1,0 +1,5 @@
+{{- if .Values.collaborator.enabled }}
+{{- include "huly.deployment" (dict "root" . "name" "collaborator" "config" .Values.collaborator "port" (.Values.collaborator.service.port | int)) }}
+---
+{{- include "huly.service" (dict "root" . "name" "collaborator" "port" (.Values.collaborator.service.port | int)) }}
+{{- end }}

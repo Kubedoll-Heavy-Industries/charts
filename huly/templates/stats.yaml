@@ -1,0 +1,5 @@
+{{- if .Values.stats.enabled }}
+{{- include "huly.deployment" (dict "root" . "name" "stats" "config" .Values.stats "port" (.Values.stats.service.port | int)) }}
+---
+{{- include "huly.service" (dict "root" . "name" "stats" "port" (.Values.stats.service.port | int)) }}
+{{- end }}

@@ -1,0 +1,5 @@
+{{- if .Values.fulltext.enabled }}
+{{- include "huly.deployment" (dict "root" . "name" "fulltext" "config" .Values.fulltext "port" (.Values.fulltext.service.port | int)) }}
+---
+{{- include "huly.service" (dict "root" . "name" "fulltext" "port" (.Values.fulltext.service.port | int)) }}
+{{- end }}

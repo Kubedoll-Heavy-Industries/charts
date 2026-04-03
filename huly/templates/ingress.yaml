@@ -1,0 +1,51 @@
+{{- if .Values.ingress.enabled }}
+{{- $fullname := include "huly.fullname" . -}}
+{{- $labels := include "huly.labels" . -}}
+{{- $tls := .Values.ingress.tls -}}
+{{- $annotations := .Values.ingress.annotations -}}
+{{- $className := .Values.ingress.ingressClassName -}}
+{{- range $svc := list
+  (dict "name" "front" "domain" $.Values.ingress.domain "port" ($.Values.front.service.port | int))
+  (dict "name" "transactor" "domain" $.Values.ingress.transactorDomain "port" ($.Values.transactor.service.port | int))
+  (dict "name" "collaborator" "domain" $.Values.ingress.collaboratorDomain "port" ($.Values.collaborator.service.port | int))
+  (dict "name" "account" "domain" $.Values.ingress.accountDomain "port" ($.Values.account.service.port | int))
+}}
+{{- if $svc.domain }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $fullname }}-{{ $svc.name }}
+  labels:
+    {{- $labels | nindent 4 }}
+    app.kubernetes.io/component: {{ $svc.name }}
+  {{- with $annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if $className }}
+  ingressClassName: {{ $className | quote }}
+  {{- end }}
+  {{- if $tls.enabled }}
+  tls:
+    - hosts:
+        - {{ $svc.domain | quote }}
+      {{- if $tls.secretName }}
+      secretName: {{ $tls.secretName | quote }}
+      {{- end }}
+  {{- end }}
+  rules:
+    - host: {{ $svc.domain | quote }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ $fullname }}-{{ $svc.name }}
+                port:
+                  number: {{ $svc.port }}
+{{- end }}
+{{- end }}
+{{- end }}

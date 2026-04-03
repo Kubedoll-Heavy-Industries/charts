@@ -1,0 +1,5 @@
+{{- if .Values.transactor.enabled }}
+{{- include "huly.deployment" (dict "root" . "name" "transactor" "config" .Values.transactor "port" (.Values.transactor.service.port | int)) }}
+---
+{{- include "huly.service" (dict "root" . "name" "transactor" "port" (.Values.transactor.service.port | int)) }}
+{{- end }}

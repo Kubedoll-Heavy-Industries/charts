@@ -1,0 +1,5 @@
+{{- if .Values.front.enabled }}
+{{- include "huly.deployment" (dict "root" . "name" "front" "config" .Values.front "port" (.Values.front.service.port | int)) }}
+---
+{{- include "huly.service" (dict "root" . "name" "front" "port" (.Values.front.service.port | int)) }}
+{{- end }}

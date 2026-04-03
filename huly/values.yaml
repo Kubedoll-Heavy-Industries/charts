@@ -1,0 +1,192 @@
+# yaml-language-server: $schema=values.schema.json
+## Default values for Huly
+
+global:
+  # -- Global image tag override (applies to all Huly services)
+  imageTag: "v0.7.406"
+  # -- Global image pull policy
+  imagePullPolicy: IfNotPresent
+  # -- Global image pull secrets
+  imagePullSecrets: []
+
+# -- Required server secret for session encryption
+serverSecret: ""
+
+# -- Name of an existing Secret containing SERVER_SECRET key
+existingSecret: ""
+
+# -----------------------------------------------------------------------------
+# Service configurations
+# -----------------------------------------------------------------------------
+
+front:
+  enabled: true
+  image:
+    repository: hardcoreeng/front
+    tag: ""  # defaults to global.imageTag
+  replicas: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  service:
+    port: 8087
+
+transactor:
+  enabled: true
+  image:
+    repository: hardcoreeng/transactor
+    tag: ""
+  replicas: 1
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+  service:
+    port: 3333
+
+account:
+  enabled: true
+  image:
+    repository: hardcoreeng/account
+    tag: ""
+  replicas: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  service:
+    port: 3000
+
+workspace:
+  enabled: true
+  image:
+    repository: hardcoreeng/workspace
+    tag: ""
+  replicas: 1
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+  service:
+    port: 8083
+
+collaborator:
+  enabled: true
+  image:
+    repository: hardcoreeng/collaborator
+    tag: ""
+  replicas: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  service:
+    port: 3078
+
+fulltext:
+  enabled: true
+  image:
+    repository: hardcoreeng/fulltext
+    tag: ""
+  replicas: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  service:
+    port: 4700
+
+stats:
+  enabled: true
+  image:
+    repository: hardcoreeng/stats
+    tag: ""
+  replicas: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
+  service:
+    port: 4900
+
+# -----------------------------------------------------------------------------
+# External dependencies
+# -----------------------------------------------------------------------------
+
+externalCockroachdb:
+  host: ""
+  port: 26257
+  database: "huly"
+  username: "huly"
+  password: ""
+  sslMode: "verify-full"
+
+externalElasticsearch:
+  host: ""
+  port: 9200
+  scheme: "https"
+  indexName: "huly"
+
+externalS3:
+  endpoint: ""
+  accessKey: ""
+  secretKey: ""
+  bucket: "huly"
+
+# -----------------------------------------------------------------------------
+# Bundled Redpanda (single-node dev mode)
+# -----------------------------------------------------------------------------
+
+redpanda:
+  enabled: true
+  image:
+    repository: redpandadata/redpanda
+    tag: "v24.3.6"
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  storage:
+    size: 5Gi
+    storageClassName: ""
+
+# -----------------------------------------------------------------------------
+# Ingress
+# -----------------------------------------------------------------------------
+
+ingress:
+  enabled: false
+  ingressClassName: ""
+  annotations: {}
+  domain: ""
+  transactorDomain: ""
+  collaboratorDomain: ""
+  accountDomain: ""
+  tls:
+    enabled: true
+    secretName: ""

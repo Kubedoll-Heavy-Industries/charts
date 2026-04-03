@@ -1,0 +1,5 @@
+{{- if .Values.workspace.enabled }}
+{{- include "huly.deployment" (dict "root" . "name" "workspace" "config" .Values.workspace "port" (.Values.workspace.service.port | int)) }}
+---
+{{- include "huly.service" (dict "root" . "name" "workspace" "port" (.Values.workspace.service.port | int)) }}
+{{- end }}
