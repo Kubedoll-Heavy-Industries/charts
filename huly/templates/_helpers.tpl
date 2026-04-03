@@ -108,5 +108,13 @@ S3 storage config string
 */}}
 {{- define "huly.storageConfig" -}}
 {{- $cfg := .Values.externalS3 -}}
-{{- printf "minio|%s?accessKey=%s&secretKey=%s" $cfg.endpoint $cfg.accessKey $cfg.secretKey }}
+{{- $endpoint := regexReplaceAll "^https?://" $cfg.endpoint "" -}}
+{{- printf "minio|%s?accessKey=%s&secretKey=%s" $endpoint $cfg.accessKey $cfg.secretKey }}
+{{- end }}
+
+{{/*
+Extract host:port from S3 endpoint URL (strips scheme)
+*/}}
+{{- define "huly.minioEndpoint" -}}
+{{- regexReplaceAll "^https?://" .Values.externalS3.endpoint "" }}
 {{- end }}

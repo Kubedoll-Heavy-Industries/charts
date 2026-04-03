@@ -14,7 +14,7 @@ data:
   ELASTIC_URL: {{ include "huly.elasticUrl" . | quote }}
   ELASTIC_INDEX_NAME: {{ .Values.externalElasticsearch.indexName | quote }}
   # S3
-  MINIO_ENDPOINT: {{ .Values.externalS3.endpoint | quote }}
+  MINIO_ENDPOINT: {{ include "huly.minioEndpoint" . | quote }}
   MINIO_ACCESS_KEY: {{ .Values.externalS3.accessKey | quote }}
   MINIO_SECRET_KEY: {{ .Values.externalS3.secretKey | quote }}
   S3_BUCKET: {{ .Values.externalS3.bucket | quote }}
