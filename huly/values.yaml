@@ -33,7 +33,7 @@ front:
       cpu: 500m
       memory: 512Mi
   service:
-    port: 8087
+    port: 8080
 
 transactor:
   enabled: true

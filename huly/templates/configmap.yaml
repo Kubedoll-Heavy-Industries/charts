@@ -38,10 +38,7 @@ data:
   FULLTEXT_URL: {{ printf "http://%s-fulltext:%v" $fullname (.Values.fulltext.service.port | int) | quote }}
   STATS_URL: {{ printf "http://%s-stats:%v" $fullname (.Values.stats.service.port | int) | quote }}
   REKONI_URL: ""
-  # Ports
-  SERVER_PORT: {{ .Values.transactor.service.port | quote }}
-  ACCOUNT_PORT: {{ .Values.account.service.port | quote }}
-  COLLABORATOR_PORT: {{ .Values.collaborator.service.port | quote }}
+  # Ports — set per-service via deployment env overrides, not in shared ConfigMap
   # Queue (Redpanda/Kafka)
   {{- if .Values.redpanda.enabled }}
   QUEUE_CONFIG: {{ printf "%s-redpanda:9092" $fullname | quote }}

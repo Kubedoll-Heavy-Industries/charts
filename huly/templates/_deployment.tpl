@@ -47,10 +47,14 @@ spec:
                 name: {{ include "huly.configMapName" .root }}
             - secretRef:
                 name: {{ include "huly.secretName" .root }}
-          {{- with .extraEnv }}
           env:
+            {{- if .port }}
+            - name: SERVER_PORT
+              value: {{ .port | quote }}
+            {{- end }}
+            {{- with .extraEnv }}
             {{- toYaml . | nindent 12 }}
-          {{- end }}
+            {{- end }}
           resources:
             {{- toYaml .config.resources | nindent 12 }}
           volumeMounts:
