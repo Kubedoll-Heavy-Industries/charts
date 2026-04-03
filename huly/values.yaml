@@ -3,7 +3,7 @@
 
 global:
   # -- Global image tag override (applies to all Huly services)
-  imageTag: "v0.6.6"
+  imageTag: "v0.6.502"
   # -- Global image pull policy
   imagePullPolicy: IfNotPresent
   # -- Global image pull secrets

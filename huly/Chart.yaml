@@ -2,8 +2,8 @@ apiVersion: v2
 name: huly
 description: Helm chart for Huly, an open-source project management platform
 type: application
-version: 0.1.1
-appVersion: "v0.6.6"
+version: 0.1.2
+appVersion: "v0.6.502"
 home: https://huly.io
 sources:
   - https://github.com/hcengineering/huly-platform
