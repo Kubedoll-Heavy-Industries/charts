@@ -190,3 +190,14 @@ ingress:
   tls:
     enabled: true
     secretName: ""
+
+# -----------------------------------------------------------------------------
+# OIDC Authentication (OpenID Connect)
+# -----------------------------------------------------------------------------
+
+oidc:
+  enabled: false
+  clientId: ""
+  clientSecret: ""
+  issuer: ""
+  displayName: "SSO"

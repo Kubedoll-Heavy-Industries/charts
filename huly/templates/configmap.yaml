@@ -54,3 +54,9 @@ data:
   CALENDAR_URL: ""
   LOVE_ENDPOINT: ""
   DESKTOP_UPDATES_CHANNEL: ""
+  # OIDC
+  {{- if .Values.oidc.enabled }}
+  OPENID_CLIENT_ID: {{ .Values.oidc.clientId | quote }}
+  OPENID_ISSUER: {{ .Values.oidc.issuer | quote }}
+  OPENID_DISPLAY_NAME: {{ .Values.oidc.displayName | default "SSO" | quote }}
+  {{- end }}
