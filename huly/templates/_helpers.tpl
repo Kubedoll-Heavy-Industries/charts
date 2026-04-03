@@ -74,9 +74,7 @@ ConfigMap name
 Pod security context (shared across all services)
 */}}
 {{- define "huly.podSecurityContext" -}}
-runAsNonRoot: true
-runAsUser: 65534
-fsGroup: 65534
+{}
 {{- end }}
 
 {{/*
@@ -87,7 +85,6 @@ allowPrivilegeEscalation: false
 capabilities:
   drop:
     - ALL
-readOnlyRootFilesystem: true
 {{- end }}
 
 {{/*

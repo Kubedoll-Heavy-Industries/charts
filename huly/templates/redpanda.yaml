@@ -25,9 +25,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 65534
-        fsGroup: 65534
+        fsGroup: 101
       containers:
         - name: redpanda
           image: "{{ .Values.redpanda.image.repository }}:{{ .Values.redpanda.image.tag }}"
@@ -56,6 +54,15 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /var/lib/redpanda/data
+            - name: config
+              mountPath: /etc/redpanda
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: config
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}
   volumeClaimTemplates:
     - metadata:
         name: data

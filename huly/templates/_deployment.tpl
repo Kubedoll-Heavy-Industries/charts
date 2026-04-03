@@ -56,7 +56,11 @@ spec:
           volumeMounts:
             - name: tmp
               mountPath: /tmp
+            - name: logs
+              mountPath: /usr/src/app/logs
       volumes:
         - name: tmp
+          emptyDir: {}
+        - name: logs
           emptyDir: {}
 {{- end }}
