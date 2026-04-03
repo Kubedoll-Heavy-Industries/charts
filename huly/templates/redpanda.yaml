@@ -45,6 +45,10 @@ spec:
             - "1"
             - --kafka-addr
             - "0.0.0.0:9092"
+            - --advertise-kafka-addr
+            - "{{ $fullname }}-redpanda:9092"
+            - --advertise-rpc-addr
+            - "{{ $fullname }}-redpanda:33145"
           ports:
             - name: kafka
               containerPort: 9092

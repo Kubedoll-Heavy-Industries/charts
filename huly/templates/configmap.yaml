@@ -5,28 +5,55 @@ metadata:
   labels:
     {{- include "huly.labels" . | nindent 4 }}
 data:
+  # Database
   DB_URL: {{ include "huly.dbUrl" . | quote }}
   MONGO_URL: {{ include "huly.dbUrl" . | quote }}
+  ACCOUNTS_DB_URL: {{ include "huly.dbUrl" . | quote }}
+  FULLTEXT_DB_URL: {{ include "huly.dbUrl" . | quote }}
+  # Elasticsearch
   ELASTIC_URL: {{ include "huly.elasticUrl" . | quote }}
   ELASTIC_INDEX_NAME: {{ .Values.externalElasticsearch.indexName | quote }}
+  # S3
   MINIO_ENDPOINT: {{ .Values.externalS3.endpoint | quote }}
   MINIO_ACCESS_KEY: {{ .Values.externalS3.accessKey | quote }}
   MINIO_SECRET_KEY: {{ .Values.externalS3.secretKey | quote }}
   S3_BUCKET: {{ .Values.externalS3.bucket | quote }}
+  # Service URLs (external or internal)
+  {{- $fullname := include "huly.fullname" . }}
   {{- if .Values.ingress.enabled }}
   ACCOUNTS_URL: {{ printf "https://%s" .Values.ingress.accountDomain | quote }}
+  ACCOUNTS_URL_INTERNAL: {{ printf "http://%s-account:%v" $fullname (.Values.account.service.port | int) | quote }}
   COLLABORATOR_URL: {{ printf "wss://%s" .Values.ingress.collaboratorDomain | quote }}
   UPLOAD_URL: {{ printf "https://%s/files" .Values.ingress.domain | quote }}
   FRONT_URL: {{ printf "https://%s" .Values.ingress.domain | quote }}
+  TRANSACTOR_URL: {{ printf "wss://%s" .Values.ingress.transactorDomain | quote }}
   {{- else }}
-  ACCOUNTS_URL: {{ printf "http://%s-account:%v" (include "huly.fullname" .) (.Values.account.service.port | int) | quote }}
-  COLLABORATOR_URL: {{ printf "ws://%s-collaborator:%v" (include "huly.fullname" .) (.Values.collaborator.service.port | int) | quote }}
-  UPLOAD_URL: {{ printf "http://%s-front:%v/files" (include "huly.fullname" .) (.Values.front.service.port | int) | quote }}
-  FRONT_URL: {{ printf "http://%s-front:%v" (include "huly.fullname" .) (.Values.front.service.port | int) | quote }}
+  ACCOUNTS_URL: {{ printf "http://%s-account:%v" $fullname (.Values.account.service.port | int) | quote }}
+  ACCOUNTS_URL_INTERNAL: {{ printf "http://%s-account:%v" $fullname (.Values.account.service.port | int) | quote }}
+  COLLABORATOR_URL: {{ printf "ws://%s-collaborator:%v" $fullname (.Values.collaborator.service.port | int) | quote }}
+  UPLOAD_URL: {{ printf "http://%s-front:%v/files" $fullname (.Values.front.service.port | int) | quote }}
+  FRONT_URL: {{ printf "http://%s-front:%v" $fullname (.Values.front.service.port | int) | quote }}
+  TRANSACTOR_URL: {{ printf "ws://%s-transactor:%v" $fullname (.Values.transactor.service.port | int) | quote }}
   {{- end }}
+  FULLTEXT_URL: {{ printf "http://%s-fulltext:%v" $fullname (.Values.fulltext.service.port | int) | quote }}
+  STATS_URL: {{ printf "http://%s-stats:%v" $fullname (.Values.stats.service.port | int) | quote }}
   REKONI_URL: ""
-  FULLTEXT_URL: {{ printf "http://%s-fulltext:%v" (include "huly.fullname" .) (.Values.fulltext.service.port | int) | quote }}
-  STATS_URL: {{ printf "http://%s-stats:%v" (include "huly.fullname" .) (.Values.stats.service.port | int) | quote }}
+  # Ports
+  SERVER_PORT: {{ .Values.transactor.service.port | quote }}
+  ACCOUNT_PORT: {{ .Values.account.service.port | quote }}
+  COLLABORATOR_PORT: {{ .Values.collaborator.service.port | quote }}
+  # Queue (Redpanda/Kafka)
   {{- if .Values.redpanda.enabled }}
-  KAFKA_URL: {{ printf "%s-redpanda:9092" (include "huly.fullname" .) | quote }}
+  QUEUE_CONFIG: {{ printf "%s-redpanda:9092" $fullname | quote }}
   {{- end }}
+  # App defaults
+  MODEL_ENABLED: "*"
+  TITLE: "Huly"
+  DEFAULT_LANGUAGE: "en"
+  LAST_NAME_FIRST: "true"
+  # Unused but required to avoid crash
+  GMAIL_URL: ""
+  TELEGRAM_URL: ""
+  CALENDAR_URL: ""
+  LOVE_ENDPOINT: ""
+  DESKTOP_UPDATES_CHANNEL: ""
