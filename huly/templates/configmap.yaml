@@ -54,8 +54,8 @@ data:
   CALENDAR_URL: ""
   LOVE_ENDPOINT: ""
   DESKTOP_UPDATES_CHANNEL: ""
-  # Trust internal CA certs for OIDC discovery over cluster-internal HTTPS
-  NODE_TLS_REJECT_UNAUTHORIZED: "0"
+  # NODE_TLS_REJECT_UNAUTHORIZED not needed — OIDC discovery goes via public URL
+  # with CF Access bypass on /application/o/* paths
   # OIDC
   {{- if .Values.oidc.enabled }}
   OPENID_CLIENT_ID: {{ .Values.oidc.clientId | quote }}
