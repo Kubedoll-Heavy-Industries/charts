@@ -1,0 +1,265 @@
+global:
+  createDefaultServiceAccount: false
+
+controllers:
+  main:
+    type: deployment
+    replicas: 3
+    revisionHistoryLimit: 3
+    strategy: RollingUpdate
+    rollingUpdate:
+      surge: 1
+      unavailable: "0"
+    serviceAccount:
+      name: geodesa-api
+    podDisruptionBudget:
+      maxUnavailable: 1
+    pod:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 45
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/controller: main
+                    app.kubernetes.io/instance: geodesa-api
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/controller: main
+              app.kubernetes.io/instance: geodesa-api
+    containers:
+      app:
+        image:
+          repository: ghcr.io/geodesa-ai/console-bff
+          tag: 0.1.0
+          digest: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+          pullPolicy: IfNotPresent
+        env:
+          OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector.observability-system.svc:4318
+          OTEL_SERVICE_NAME: geodesa-api
+          DATABASE_URL:
+            valueFrom:
+              secretKeyRef:
+                name: geodesa-api-database
+                key: uri
+        envFrom:
+          - configMapRef:
+              name: geodesa-api-config
+          - secretRef:
+              name: geodesa-api-runtime
+        ports:
+          - name: http
+            containerPort: 8080
+            protocol: TCP
+        probes:
+          readiness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /health/ready
+                port: http
+              periodSeconds: 5
+              timeoutSeconds: 2
+          liveness:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /health/live
+                port: http
+              periodSeconds: 10
+              timeoutSeconds: 2
+          startup:
+            enabled: true
+            custom: true
+            spec:
+              httpGet:
+                path: /health/ready
+                port: http
+              failureThreshold: 30
+              periodSeconds: 2
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: "1"
+            memory: 512Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+
+  migration:
+    type: job
+    annotations:
+      helm.sh/hook: pre-install,pre-upgrade
+      helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+      helm.sh/hook-weight: "-5"
+    serviceAccount:
+      name: geodesa-api
+    job:
+      activeDeadlineSeconds: 600
+      backoffLimit: 2
+    pod:
+      automountServiceAccountToken: false
+      restartPolicy: Never
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      terminationGracePeriodSeconds: 30
+    containers:
+      migration:
+        image:
+          repository: ghcr.io/geodesa-ai/console-bff
+          tag: 0.1.0
+          digest: sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+          pullPolicy: IfNotPresent
+        command:
+          - /app/console-bff
+        args:
+          - migrate
+        env:
+          DATABASE_URL:
+            valueFrom:
+              secretKeyRef:
+                name: geodesa-api-database
+                key: uri
+        envFrom:
+          - configMapRef:
+              name: geodesa-api-config
+          - secretRef:
+              name: geodesa-api-runtime
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: "1"
+            memory: 512Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
+
+service:
+  main:
+    controller: main
+    type: ClusterIP
+    ports:
+      http:
+        port: 80
+        protocol: HTTP
+        targetPort: 8080
+
+persistence:
+  database-certificate:
+    type: secret
+    name: geodesa-api-database-certificate
+    advancedMounts:
+      main:
+        app:
+          - path: /var/run/secrets/database
+            readOnly: true
+      migration:
+        migration:
+          - path: /var/run/secrets/database
+            readOnly: true
+  projected-config:
+    type: custom
+    volumeSpec:
+      projected:
+        defaultMode: 288
+        sources:
+          - configMap:
+              name: geodesa-api-files
+          - secret:
+              name: geodesa-api-file-secrets
+    advancedMounts:
+      main:
+        app:
+          - path: /etc/geodesa
+            readOnly: true
+      migration:
+        migration:
+          - path: /etc/geodesa
+            readOnly: true
+  secrets-store:
+    type: custom
+    volumeSpec:
+      csi:
+        driver: secrets-store.csi.k8s.io
+        readOnly: true
+        volumeAttributes:
+          secretProviderClass: geodesa-api
+    advancedMounts:
+      main:
+        app:
+          - path: /var/run/secrets-store
+            readOnly: true
+      migration:
+        migration:
+          - path: /var/run/secrets-store
+            readOnly: true
+
+route:
+  main:
+    kind: HTTPRoute
+    parentRefs:
+      - group: gateway.networking.k8s.io
+        kind: Gateway
+        name: platform-internal
+        namespace: gateway-system
+        sectionName: websecure
+    hostnames:
+      - api.internal.geodesa.test
+    rules:
+      - matches:
+          - path:
+              type: PathPrefix
+              value: /
+        backendRefs:
+          - identifier: main
+            port: http
+
+rawResources:
+  backend-grant:
+    forceRename: geodesa-api-backend
+    manifest:
+      apiVersion: gateway.networking.k8s.io/v1beta1
+      kind: ReferenceGrant
+      metadata:
+        namespace: apps
+      spec:
+        from:
+          - group: gateway.networking.k8s.io
+            kind: HTTPRoute
+            namespace: gateway-system
+        to:
+          - group: ""
+            kind: Service
+            name: geodesa-api
