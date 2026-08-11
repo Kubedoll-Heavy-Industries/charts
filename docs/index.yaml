@@ -1,5 +1,34 @@
 apiVersion: v1
 entries:
+  geodesa-app:
+  - annotations:
+      artifacthub.io/changes: |-
+        - kind: changed
+          description: Renamed the upstream app-template chart for Geodesa first-party workloads.
+      geodesa.ai/upstream-archive-sha256: e99ebe581c41a38e1fa282bf53d4306b5cba01a27f89543583dc0817b8fa6558
+      geodesa.ai/upstream-commit: eea11eae60170b61485cc14314a6bf20f42c79e4
+      geodesa.ai/upstream-oci-digest: sha256:70a7cb6766eb468068c2c1700c8450253070dc671a9fbbd1a6346a66545e2b2b
+      geodesa.ai/upstream-version: 5.0.1
+    apiVersion: v2
+    created: "2026-08-11T04:22:12.64034-03:00"
+    dependencies:
+    - name: common
+      repository: https://bjw-s-labs.github.io/helm-charts
+      version: 5.0.1
+    description: A minimally changed bjw-s app-template fork for Geodesa first-party
+      applications.
+    digest: f0302276e86561720ec243605053bd6a9da8716cce428f2a2e39c0342bfd9530
+    kubeVersion: '>=1.28.0-0'
+    maintainers:
+    - name: Kubedoll Heavy Industries
+    name: geodesa-app
+    sources:
+    - https://github.com/bjw-s-labs/helm-charts/tree/app-template-5.0.1/charts/other/app-template
+    - https://github.com/Kubedoll-Heavy-Industries/charts
+    type: application
+    urls:
+    - https://kubedoll-heavy-industries.github.io/charts/geodesa-app-5.0.1-kdhi.1.tgz
+    version: 5.0.1-kdhi.1
   huly:
   - apiVersion: v2
     appVersion: v0.7.242
@@ -558,4 +587,4 @@ entries:
     urls:
     - https://kubedoll-heavy-industries.github.io/charts/terraria-tshock-0.1.0.tgz
     version: 0.1.0
-generated: "2026-06-18T18:09:10.795523-03:00"
+generated: "2026-08-11T04:22:12.634039-03:00"
